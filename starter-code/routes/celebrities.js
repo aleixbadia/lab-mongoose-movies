@@ -40,11 +40,13 @@ celebritiesRouter.post("/", (req, res, next) => {
 
   Celebrity.create({ name, ocupation, catchPhrase })
     .then(() => {
+      console.log("Create");
+      
       res.redirect("/celebrities");
     })
     .catch((err) => {
       console.log(err);
-      res.redirect("/celebrities");
+      res.redirect("/celebrities/new");
     });
 });
 
@@ -58,5 +60,34 @@ celebritiesRouter.post("/:celebrityId/delete", (req, res, next) => {
       next();
     });
 });
+
+celebritiesRouter.get("/:celebrityId/edit", (req, res, next) => {
+  Celebrity.findById(req.params.celebrityId)
+    .then((foundCelebrity) => {
+      const data = {
+        foundCelebrity: foundCelebrity,
+      };
+      res.render("celebrities/edit", data);
+    })
+    .catch((err) => {
+      console.log(err);
+      next();
+    });
+});
+
+celebritiesRouter.post("/:celebrityId", (req, res, next) => {
+  const { name, ocupation, catchPhrase } = req.body;
+  Celebrity.findByIdAndUpdate(req.params.celebrityId, { name, ocupation, catchPhrase })
+    .then(() => {
+      console.log("Update");
+      
+      res.redirect("/celebrities");
+    })
+    .catch((err) => {
+      console.log(err);
+      next();
+    });
+});
+
 
 module.exports = celebritiesRouter;

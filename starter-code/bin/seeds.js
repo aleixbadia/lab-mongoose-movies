@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Celebrity = require("./../models/celebrity");
+const Movie = require("./../models/movie")
 require("dotenv").config();
 
 // DATA
@@ -21,6 +22,24 @@ const celebrities = [
   },
 ];
 
+const movies = [
+  {
+    title: "The Matrix",
+    genre: "Sci-fi",
+    plot: "vaia fumada",
+  },
+  {
+    title: "Lo que el viento se llevó",
+    genre: "drama",
+    plot: "I don't remember",
+  },
+  {
+    title: "Titanic",
+    genre: "drama",
+    plot: "Se veia venir",
+  },
+];
+
 // MONGOOSE CONNECTION
 // 1. CONNECT TO DB
 mongoose
@@ -33,12 +52,21 @@ mongoose
   })
   .then(() => {
     // INSERT THE DATA TO DB (RUN THE SEED)
-    // 3. CREATE THE BOOK DOCUMENTS
+    // 3. CREATE THE CELEBRITIES DOCUMENTS
     const pr = Celebrity.create(celebrities);
     return pr;
   })
   .then((createdCelebrities) => {
     console.log(`Created ${createdCelebrities.length} celebrities.`);
+  })
+  .then(() => {
+    // INSERT THE DATA TO DB (RUN THE SEED)
+    // 3. CREATE THE MOVIES DOCUMENTS
+    const pr = Movie.create(movies);
+    return pr;
+  })
+  .then((createdMovies) => {
+    console.log(`Created ${createdMovies.length} movies.`);
     mongoose.connection.close();
   })
   .catch((err) => console.log("Error connection to the DB", err));
